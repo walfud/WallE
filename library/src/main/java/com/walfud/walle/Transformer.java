@@ -228,8 +228,8 @@ public class Transformer {
     }
 
     // Other
-    public static Map<Object, Object> asMap(Object... objs) {
-        Map<Object, Object> m = new HashMap<>();
+    public static <K, V> Map<K, V> asMap(Object... objs) {
+        Map<K, V> m = new HashMap<>();
         if (objs == null || objs.length % 2 != 0) {
             return m;
         }
@@ -237,8 +237,8 @@ public class Transformer {
         for (int i = 0; i < objs.length; i += 2) {
             int j = i + 1;
 
-            Object k = objs[i];
-            Object v = objs[j];
+            K k = (K) objs[i];
+            V v = (V) objs[j];
 
             m.put(k, v);
         }

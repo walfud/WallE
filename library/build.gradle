@@ -1,3 +1,11 @@
+def MAJOR_VERSION = 1
+def MINOR_VERSION = 0
+def REVISION_VERSION = 0
+
+def VERSION_CODE = MAJOR_VERSION * 100 + MINOR_VERSION * 10 + REVISION_VERSION
+def VERSION_NAME = MAJOR_VERSION + '.' + MINOR_VERSION
+def ARTIFACT_VERSION = MAJOR_VERSION + '.' + MINOR_VERSION + '.' + REVISION_VERSION
+
 buildscript {
     repositories {
         jcenter()
@@ -19,8 +27,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode VERSION_CODE
+        versionName VERSION_NAME
     }
     buildTypes {
         release {
@@ -34,8 +42,6 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:recyclerview-v7:23.1.1'
 }
-
-def ARTIFACT_VERSION='1.0.0'
 
 group = 'com.walfud'
 version = ARTIFACT_VERSION
@@ -63,7 +69,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 javadoc {
-    options{
+    options {
         encoding "UTF-8"
         charSet 'UTF-8'
         author true

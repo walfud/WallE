@@ -91,8 +91,8 @@ public class SecretEvent {
         return this;
     }
 
-    public SecretEvent setMaxContinuosTimeInMillis(long maxContinuosTimeInMillis) {
-        mMaxContinuousTimeInMillis = maxContinuosTimeInMillis;
+    public SecretEvent setMaxContinuousTimeInMillis(long maxContinuousTimeInMillis) {
+        mMaxContinuousTimeInMillis = maxContinuousTimeInMillis;
         return this;
     }
 

@@ -68,7 +68,9 @@ public class ZipUtils {
             e.printStackTrace();
         } finally {
             try {
-                fileOutputStream.close();
+                if (fileOutputStream != null) {
+                    fileOutputStream.close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -99,7 +99,7 @@ install {
 }
 
 bintray {
-    user = 'walfud'
+    user = BINTRAY_USER
     key = BINTRAY_KEY
 
     configurations = ['archives']

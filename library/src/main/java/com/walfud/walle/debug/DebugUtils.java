@@ -6,20 +6,12 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Debug;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 
-import com.walfud.walle.Transformer;
 import com.walfud.walle.WallE;
-import com.walfud.walle.algorithm.Comparator;
-import com.walfud.walle.collection.CollectionUtils;
+import com.walfud.walle.lang.Transformer;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by walfud on 2015/12/18.
@@ -117,7 +109,7 @@ public class DebugUtils {
         debugInfo.firstBootTime = Transformer.timeInMillis2String(Build.TIME);
         debugInfo.osName = Build.DISPLAY;
         debugInfo.verCode = Build.VERSION.SDK_INT;
-        
+
         debugInfo.isRoot = isRoot();
         debugInfo.imei = telephonyManager.getDeviceId();
         ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
@@ -126,16 +118,15 @@ public class DebugUtils {
         debugInfo.availableMemInMb = memoryInfo.availMem / 1024 / 1024;
         debugInfo.isLowMem = memoryInfo.lowMemory;
 
-        Map<PackageInfo, List<ActivityManager.RunningAppProcessInfo>> packageInfo_processInfoList = getPkgProcessMap();
-        for (Map.Entry<PackageInfo, List<ActivityManager.RunningAppProcessInfo>> kv : packageInfo_processInfoList.entrySet()) {
-            PackageInfo packageInfo = kv.getKey();
-            List<ActivityManager.RunningAppProcessInfo> processInfoList = kv.getValue();
+        PackageManager packageManager = context.getPackageManager();
+        for (PackageInfo packageInfo : packageManager.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES | PackageManager.GET_GIDS | PackageManager.GET_CONFIGURATIONS | PackageManager.GET_INSTRUMENTATION | PackageManager.GET_PERMISSIONS | PackageManager.GET_PROVIDERS | PackageManager.GET_RECEIVERS | PackageManager.GET_SERVICES | PackageManager.GET_SIGNATURES)) {
             ApplicationInfo applicationInfo = packageInfo.applicationInfo;
 
             // Pkg info
             DebugInfo.PkgInfo pkgInfo = new DebugInfo.PkgInfo();
             debugInfo.pkgInfoList.add(pkgInfo);
-            pkgInfo.name = packageInfo.packageName;
+            pkgInfo.appName = String.valueOf(packageManager.getApplicationLabel(applicationInfo));
+            pkgInfo.pkgName = packageInfo.packageName;
             pkgInfo.verName = packageInfo.versionName;
             pkgInfo.verCode = packageInfo.versionCode;
             pkgInfo.targetVerCode = applicationInfo.targetSdkVersion;
@@ -143,79 +134,17 @@ public class DebugUtils {
             pkgInfo.lastUpdateTime = Transformer.timeInMillis2String(packageInfo.lastUpdateTime);
             pkgInfo.requestPermissionList = Transformer.strings2StringList(packageInfo.requestedPermissions);
             pkgInfo.dataDir = applicationInfo.dataDir;
+            pkgInfo.flags = packageInfo.applicationInfo.flags;
 
-            // Process info
-            for (ActivityManager.RunningAppProcessInfo appProcessInfo : processInfoList) {
-                DebugInfo.ProcessInfo processInfo = new DebugInfo.ProcessInfo();
-                pkgInfo.processInfoList.add(processInfo);
-                processInfo.uid = appProcessInfo.uid;
-                processInfo.pid = appProcessInfo.pid;
-                processInfo.processName = appProcessInfo.processName;
-                Debug.MemoryInfo[] memoryInfos = activityManager.getProcessMemoryInfo(new int[]{appProcessInfo.pid});
-                if (memoryInfos.length > 0) {
-                    processInfo.processMemInMb = memoryInfos[0].getTotalPss() / 1024;
-
-                    pkgInfo.pkgMemInMb += memoryInfos[0].getTotalPss() / 1024;
-                }
-
-                // TODO: thread info
-            }
+            // TODO: process info
+            // TODO: thread info
         }
 
         return debugInfo;
     }
 
-    public static Map<PackageInfo, List<ActivityManager.RunningAppProcessInfo>> getPkgProcessMap() {
-        Map<PackageInfo, List<ActivityManager.RunningAppProcessInfo>> pkgProcessListMap = new HashMap<>();
+    private static final String SU_PATHS[] = {"/system/bin/su", "/system/xbin/su", "/system/sbin/su", "/sbin/su", "/vendor/bin/su"};
 
-        Context context = WallE.getContext();
-        PackageManager packageManager = context.getPackageManager();
-        ActivityManager activityManager = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningAppProcessInfo appProcessInfo : activityManager.getRunningAppProcesses()) {
-            for (String pkgName : appProcessInfo.pkgList) {
-                try {
-                    // Package info
-                    PackageInfo packageInfo = packageManager.getPackageInfo(pkgName, PackageManager.GET_ACTIVITIES
-                            | PackageManager.GET_GIDS
-                            | PackageManager.GET_CONFIGURATIONS
-                            | PackageManager.GET_INSTRUMENTATION
-                            | PackageManager.GET_PERMISSIONS
-                            | PackageManager.GET_PROVIDERS
-                            | PackageManager.GET_RECEIVERS
-                            | PackageManager.GET_SERVICES
-                            | PackageManager.GET_SIGNATURES
-                            | PackageManager.GET_UNINSTALLED_PACKAGES);
-
-                    // Process info
-                    Map.Entry<PackageInfo, List<ActivityManager.RunningAppProcessInfo>> packageInfo_appProcessInfoList = CollectionUtils.find(pkgProcessListMap, packageInfo, new Comparator<PackageInfo, PackageInfo>() {
-                        @Override
-                        public int compareTo(PackageInfo a, PackageInfo b) {
-                            if (TextUtils.equals(a.packageName, b.packageName)) {
-                                return 0;
-                            }
-
-                            return 1;
-                        }
-                    });
-                    if (packageInfo_appProcessInfoList == null) {
-                        // Create kv
-                        List<ActivityManager.RunningAppProcessInfo> appProcessInfoList = new ArrayList<>();
-                        appProcessInfoList.add(appProcessInfo);
-                        pkgProcessListMap.put(packageInfo, appProcessInfoList);
-                    } else {
-                        // Add to v
-                        packageInfo_appProcessInfoList.getValue().add(appProcessInfo);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return pkgProcessListMap;
-    }
-
-    private static final String SU_PATHS[]={"/system/bin/su","/system/xbin/su","/system/sbin/su","/sbin/su","/vendor/bin/su"};
     public static boolean isRoot() {
         for (String suPath : SU_PATHS) {
             File file = new File(suPath);

@@ -1,8 +1,13 @@
 package com.walfud.walle.io;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 /**
  * Created by walfud on 2015/11/19.
@@ -15,17 +20,17 @@ public class IoUtils {
     public static byte[] input(File file) {
         byte[] bytes = new byte[0];
 
-        FileInputStream fileInputStream = null;
+        InputStream inputStream = null;
         try {
-            fileInputStream = new FileInputStream(file);
+            inputStream = new BufferedInputStream(new FileInputStream(file));
             bytes = new byte[(int) file.length()];
-            fileInputStream.read(bytes);
+            inputStream.read(bytes);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (fileInputStream != null) {
+            if (inputStream != null) {
                 try {
-                    fileInputStream.close();
+                    inputStream.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -35,27 +40,52 @@ public class IoUtils {
         return bytes;
     }
     // Output
-
     /**
+     * @Deprecated use {@link #output(byte[], File)} instead
      * @param file
      * @param bytes
-     * @return null if fail
+     * @return
      */
     public static File output(File file, byte[] bytes) {
-        FileOutputStream fileOutputStream = null;
+        return output(bytes, file);
+    }
+
+    /**
+     * @Deprecated use {@link #output(byte[], File, boolean)} instead
+     * @param file
+     * @param bytes
+     * @param append
+     * @return
+     */
+    public static File output(File file, byte[] bytes, boolean append) {
+        return output(bytes, file, append);
+    }
+
+    /**
+     * @param bytes
+     * @param file
+     * @return null if fail
+     */
+    public static File output(byte[] bytes, File file) {
+        return output(bytes, file, false);
+    }
+
+    public static File output(byte[] bytes, File file, boolean append) {
+        OutputStream outputStream = null;
         try {
-            fileOutputStream = new FileOutputStream(file);
-            fileOutputStream.write(bytes);
-            fileOutputStream.flush();
+            outputStream = new BufferedOutputStream(new FileOutputStream(file, append));
+            outputStream.write(bytes);
+            outputStream.flush();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         } finally {
-            if (fileOutputStream != null) {
+            if (outputStream != null) {
                 try {
-                    fileOutputStream.close();
+                    outputStream.close();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    return null;
                 }
             }
         }
@@ -70,17 +100,43 @@ public class IoUtils {
 
     // Write
     public static File write(File file, String data) {
-        return write(file, data, "utf-8");
+        return write(file, data, Charset.forName("UTF-8")); // StandardCharsets.UTF_8
     }
 
-    public static File write(File file, String data, String encoding) {
+    public static File write(File file, String data, Charset charset) {
+        return write(file, data, charset, false);
+    }
+    public static File write(File file, String data, Charset charset, boolean append) {
         try {
-            return output(file, data.getBytes(encoding));
+            return output(file, data.getBytes(charset), append);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return null;
+    }
+
+    /**
+     * @deprecated use {@link #write(File, String, Charset)} instead
+     * @param file
+     * @param data
+     * @param encoding
+     * @return
+     */
+    public static File write(File file, String data, String encoding) {
+        return write(file, data, Charset.forName(encoding));
+    }
+
+    /**
+     * @deprecated use {@link #write(File, String, Charset, boolean)} instead
+     * @param file
+     * @param data
+     * @param encoding
+     * @param append
+     * @return
+     */
+    public static File write(File file, String data, String encoding, boolean append) {
+        return write(file, data, Charset.forName(encoding), append);
     }
 
     /**

@@ -29,7 +29,8 @@ public class DebugInfo {
 
     //
     public static class PkgInfo {
-        public String name;
+        public String appName;
+        public String pkgName;
         public String verName;
         public int verCode;
         public int targetVerCode;
@@ -37,6 +38,7 @@ public class DebugInfo {
         public String lastUpdateTime;
         public List<String> requestPermissionList = new ArrayList<>();
         public String dataDir;
+        public int flags;
 
         public long pkgMemInMb;
 

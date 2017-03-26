@@ -1,6 +1,6 @@
 package com.walfud.walle.algorithm.hash;
 
-import com.walfud.walle.Transformer;
+import com.walfud.walle.lang.Transformer;
 
 import java.security.MessageDigest;
 
@@ -10,10 +10,14 @@ import java.security.MessageDigest;
 public class HashUtils {
 
     public static final String TAG = "HashUtils";
-    public static final String MD5_DEFAULT = "00000000000000000000000000000000";
 
+    /**
+     *
+     * @param string
+     * @return `null` if something wrong
+     */
     public static String md5(String string) {
-        String md5 = MD5_DEFAULT;
+        String md5 = null;
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
             byte[] bytesMd5 = messageDigest.digest(string.getBytes());

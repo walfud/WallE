@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="320dp"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:gravity="center_horizontal"
+              android:orientation="vertical"
+              android:background="@android:color/white"
+              android:theme="@android:style/Theme.Dialog">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="骚年，是时候更新了~"
+        android:textSize="20sp"
+        android:textColor="#FF4A4A4A"/>
+
+    <TextView
+        android:id="@+id/tv_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:maxWidth="283dp"
+        android:text="Wuli工程师欧巴呕心沥血献上24.6MB的安装包一枚，更新鼓励下呗~Wifi环境下更新更加快捷哦！ "
+        android:textSize="12sp"
+        android:lineSpacingExtra="4dp"
+        android:textColor="#FF666666"/>
+
+    <ImageView
+        android:id="@+id/iv_pic"
+        android:layout_width="280dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/update"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="30dp">
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="130dp"
+            android:layout_height="44dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rectangle_empty"
+            android:text="我知道了"
+            android:textSize="16sp"
+            android:textColor="#FF9B9B9B"/>
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="130dp"
+            android:layout_height="44dp"
+            android:layout_gravity="center_vertical"
+            android:text="立即升级"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:background="#FF58A1FD"/>
+    </LinearLayout>
+</LinearLayout>

@@ -24,12 +24,7 @@ public class PackageUtils {
         return getVersionCode(WallE.getContext().getPackageName());
     }
     public static int getVersionCode(String packageName) {
-        return getPackageInfo(packageName, new IPackageInfoGetter<Integer>() {
-            @Override
-            public Integer get(PackageInfo packageInfo) {
-                return packageInfo.versionCode;
-            }
-        });
+        return getPackageInfo(packageName, packageInfo -> packageInfo.versionCode);
     }
 
     // Version name
@@ -37,12 +32,7 @@ public class PackageUtils {
         return getVersionName(WallE.getContext().getPackageName());
     }
     public static String getVersionName(String packageName) {
-        return getPackageInfo(packageName, new IPackageInfoGetter<String>() {
-            @Override
-            public String get(PackageInfo packageInfo) {
-                return packageInfo.versionName;
-            }
-        });
+        return getPackageInfo(packageName, packageInfo -> packageInfo.versionName);
     }
 
     private static <T> T getPackageInfo(String packageName, IPackageInfoGetter<T> getter) {

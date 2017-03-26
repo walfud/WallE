@@ -17,9 +17,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mBtn = (Button) findViewById(R.id.btn);
-        mBtn.setOnClickListener(v -> {
-            Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
-        });
+        mBtn.setOnClickListener(v -> Toast.makeText(MainActivity.this, "1", Toast.LENGTH_SHORT).show());
 
         WallE.initialize(getApplicationContext());
     }

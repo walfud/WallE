@@ -49,26 +49,23 @@ public class NetworkUtils {
      * @see #getLarge(String, OnGetLarge)
      */
     public static Single<byte[]> get(String url) {
-        return get(url, new HashMap<String, Object>());
+        return get(url, new HashMap<>());
     }
     public static Single<byte[]> get(String url, Map<String, Object> param) {
         INetwork networkInterface = getNetworkInterface();
         return networkInterface.get(url, param)
                 .subscribeOn(Schedulers.io())
-                .map(new Function<Response<ResponseBody>, byte[]>() {
-                    @Override
-                    public byte[] apply(Response<ResponseBody> response) throws Exception {
-                        byte[] bytes = null;
-                        if (response.isSuccessful()) {
-                            try {
-                                bytes = response.body().bytes();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                .map(response -> {
+                    byte[] bytes = null;
+                    if (response.isSuccessful()) {
+                        try {
+                            bytes = response.body().bytes();
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-
-                        return bytes;
                     }
+
+                    return bytes;
                 })
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -195,26 +192,23 @@ public class NetworkUtils {
     }
 
     public static Single<byte[]> post(String url) {
-        return post(url, new HashMap<String, Object>());
+        return post(url, new HashMap<>());
     }
     public static Single<byte[]> post(String url, Map<String, Object> param) {
         INetwork networkInterface = getNetworkInterface();
         return networkInterface.post(url, param)
                 .subscribeOn(Schedulers.io())
-                .map(new Function<Response<ResponseBody>, byte[]>() {
-                    @Override
-                    public byte[] apply(Response<ResponseBody> response) throws Exception {
-                        byte[] bytes = null;
-                        if (response.isSuccessful()) {
-                            try {
-                                bytes = response.body().bytes();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                .map(response -> {
+                    byte[] bytes = null;
+                    if (response.isSuccessful()) {
+                        try {
+                            bytes = response.body().bytes();
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-
-                        return bytes;
                     }
+
+                    return bytes;
                 })
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -237,14 +231,11 @@ public class NetworkUtils {
     public static Single<File> downloadFile(String url, final File target) {
         return get(url)
                 .observeOn(Schedulers.io())
-                .map(new Function<byte[], File>() {
-                    @Override
-                    public File apply(byte[] bytes) throws Exception {
-                        if (IoUtils.output(target, bytes) == null) {
-                            throw new RuntimeException(String.format("Write failed: %s", target.getAbsolutePath()));
-                        }
-                        return target;
+                .map(bytes -> {
+                    if (IoUtils.output(target, bytes) == null) {
+                        throw new RuntimeException(String.format("Write failed: %s", target.getAbsolutePath()));
                     }
+                    return target;
                 })
                 .observeOn(AndroidSchedulers.mainThread());
     }

@@ -123,41 +123,44 @@ public class SecretEvent {
     }
 
     public void make() {
-        mTargetView.setOnClickListener(view -> {
+        mTargetView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-            if (SystemClock.uptimeMillis() - mLastClickTimeInMillis >= mMaxContinuousTimeInMillis) {
-                // New begin
-                mContinuousCount = 1;
-            } else {
-                // Continuous click
-                String tip;
+                if (SystemClock.uptimeMillis() - mLastClickTimeInMillis >= mMaxContinuousTimeInMillis) {
+                    // New begin
+                    mContinuousCount = 1;
+                } else {
+                    // Continuous click
+                    String tip;
 
-                int eventLeftCount = mMaxContinuousCount - mContinuousCount;
-                if (eventLeftCount < 0 || mAlreadyTrigger) {
-                    // After
-                    tip = mAfterEventTip;
-                } else if (eventLeftCount == 0) {
-                    // Trigger event!
-                    mAlreadyTrigger = true;
+                    int eventLeftCount = mMaxContinuousCount - mContinuousCount;
+                    if (eventLeftCount < 0 || mAlreadyTrigger) {
+                        // After
+                        tip = mAfterEventTip;
+                    } else if (eventLeftCount == 0) {
+                        // Trigger event!
+                        mAlreadyTrigger = true;
 
-                    if (mTheEvent != null) {
-                        mTheEvent.run();
+                        if (mTheEvent != null) {
+                            mTheEvent.run();
+                        }
+
+                        tip = mOnEventTip;
+                    } else {    // eventLeftCount > 0
+                        // Before
+                        tip = String.format(mBeforeTipFmt, eventLeftCount);
                     }
 
-                    tip = mOnEventTip;
-                } else {    // eventLeftCount > 0
-                    // Before
-                    tip = String.format(mBeforeTipFmt, eventLeftCount);
+                    if (!TextUtils.isEmpty(tip)) {
+                        mToast.setText(tip);
+                        mToast.show();
+                    }
                 }
 
-                if (!TextUtils.isEmpty(tip)) {
-                    mToast.setText(tip);
-                    mToast.show();
-                }
+                mLastClickTimeInMillis = SystemClock.uptimeMillis();
+                mContinuousCount++;
             }
-
-            mLastClickTimeInMillis = SystemClock.uptimeMillis();
-            mContinuousCount++;
         });
     }
 }

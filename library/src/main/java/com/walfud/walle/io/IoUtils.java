@@ -146,9 +146,12 @@ public class IoUtils {
      * @return the count of file deleted
      */
     public static int delete(File target) {
-        return foreachFileAndDir(target, file -> {
-            file.delete();
-            return true;
+        return foreachFileAndDir(target, new ForeachFileHandler() {
+            @Override
+            public boolean handle(File file) {
+                file.delete();
+                return true;
+            }
         }, true);
     }
 

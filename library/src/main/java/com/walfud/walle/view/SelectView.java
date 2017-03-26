@@ -41,9 +41,12 @@ public class SelectView extends RecyclerView {
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 final RecyclerView.ViewHolder viewHolder = adapter.onCreateViewHolder(parent, viewType);
-                viewHolder.itemView.setOnClickListener(v -> {
-                    if (mOnSelectListener != null) {
-                        mOnSelectListener.onSelect(v, viewHolder.getAdapterPosition());
+                viewHolder.itemView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mOnSelectListener != null) {
+                            mOnSelectListener.onSelect(v, viewHolder.getAdapterPosition());
+                        }
                     }
                 });
                 return viewHolder;

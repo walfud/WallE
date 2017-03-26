@@ -55,17 +55,20 @@ public class NetworkUtils {
         INetwork networkInterface = getNetworkInterface();
         return networkInterface.get(url, param)
                 .subscribeOn(Schedulers.io())
-                .map(response -> {
-                    byte[] bytes = null;
-                    if (response.isSuccessful()) {
-                        try {
-                            bytes = response.body().bytes();
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                .map(new Function<Response<ResponseBody>, byte[]>() {
+                    @Override
+                    public byte[] apply(Response<ResponseBody> response) throws Exception {
+                        byte[] bytes = null;
+                        if (response.isSuccessful()) {
+                            try {
+                                bytes = response.body().bytes();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
 
-                    return bytes;
+                        return bytes;
+                    }
                 })
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -198,17 +201,20 @@ public class NetworkUtils {
         INetwork networkInterface = getNetworkInterface();
         return networkInterface.post(url, param)
                 .subscribeOn(Schedulers.io())
-                .map(response -> {
-                    byte[] bytes = null;
-                    if (response.isSuccessful()) {
-                        try {
-                            bytes = response.body().bytes();
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                .map(new Function<Response<ResponseBody>, byte[]>() {
+                    @Override
+                    public byte[] apply(Response<ResponseBody> response) throws Exception {
+                        byte[] bytes = null;
+                        if (response.isSuccessful()) {
+                            try {
+                                bytes = response.body().bytes();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
 
-                    return bytes;
+                        return bytes;
+                    }
                 })
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -231,11 +237,14 @@ public class NetworkUtils {
     public static Single<File> downloadFile(String url, final File target) {
         return get(url)
                 .observeOn(Schedulers.io())
-                .map(bytes -> {
-                    if (IoUtils.output(target, bytes) == null) {
-                        throw new RuntimeException(String.format("Write failed: %s", target.getAbsolutePath()));
+                .map(new Function<byte[], File>() {
+                    @Override
+                    public File apply(byte[] bytes) throws Exception {
+                        if (IoUtils.output(target, bytes) == null) {
+                            throw new RuntimeException(String.format("Write failed: %s", target.getAbsolutePath()));
+                        }
+                        return target;
                     }
-                    return target;
                 })
                 .observeOn(AndroidSchedulers.mainThread());
     }

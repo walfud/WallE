@@ -44,20 +44,23 @@ public class ZipUtils {
             final ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
 
             final String baseDir = src.getPath();
-            IoUtils.foreachFile(src, file -> {
-                String entryName = file.getAbsolutePath().substring(baseDir.length());
-                ZipEntry zipEntry = new ZipEntry(entryName);
+            IoUtils.foreachFile(src, new IoUtils.ForeachFileHandler() {
+                @Override
+                public boolean handle(File file) {
+                    String entryName = file.getAbsolutePath().substring(baseDir.length());
+                    ZipEntry zipEntry = new ZipEntry(entryName);
 
-                byte[] data = IoUtils.input(file);
-                try {
-                    zipOutputStream.putNextEntry(zipEntry);
-                    zipOutputStream.write(data);
-                    zipOutputStream.closeEntry();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    byte[] data = IoUtils.input(file);
+                    try {
+                        zipOutputStream.putNextEntry(zipEntry);
+                        zipOutputStream.write(data);
+                        zipOutputStream.closeEntry();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    return true;
                 }
-
-                return true;
             });
 
             zipOutputStream.close();

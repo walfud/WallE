@@ -41,10 +41,13 @@ public class BitmapTransformer {
 
     public BitmapTransformer circle(double radius) {
         RectF resultRectF = GraphicUtils.makeRectFByCenter(mSrc.getWidth() / 2, mSrc.getHeight() / 2, radius);
-        return transform(resultRectF, (canvas, width, height, paint, args) -> {
-            double radius1 = (Double) args[0];
+        return transform(resultRectF, new Transformer() {
+            @Override
+            public void draw(Canvas canvas, int width, int height, Paint paint, Object... args) {
+                double radius = (Double) args[0];
 
-            canvas.drawCircle(width / 2, height / 2, (float) radius1, paint);
+                canvas.drawCircle(width / 2, height / 2, (float) radius, paint);
+            }
         }, new Double(resultRectF.width() / 2));
     }
 
@@ -57,11 +60,14 @@ public class BitmapTransformer {
     }
     public BitmapTransformer round(double radiusX, double radiusY) {
         RectF resultRectF = new RectF(0.0f, 0.0f, mSrc.getWidth(), mSrc.getHeight());
-        return transform(resultRectF, (canvas, width, height, paint, args) -> {
-            double rx = (Double) args[0];
-            double ry = (Double) args[1];
+        return transform(resultRectF, new Transformer() {
+            @Override
+            public void draw(Canvas canvas, int width, int height, Paint paint, Object... args) {
+                double rx = (Double) args[0];
+                double ry = (Double) args[1];
 
-            canvas.drawRoundRect(0.0f, 0.0f, width, height, (float) rx, (float) ry, paint);
+                canvas.drawRoundRect(0.0f, 0.0f, width, height, (float) rx, (float) ry, paint);
+            }
         }, radiusX, radiusY);
     }
 

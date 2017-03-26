@@ -10,10 +10,26 @@ android {
         minSdkVersion config.minSdkVersion
         targetSdkVersion config.targetSdkVersion
         versionCode config.majorVersion * 100 + config.minorVersion * 10 + config.patchVersion
-        versionName "${versionCode}"
+        versionName config.majorVersion + "." + config.minorVersion + "." + config.patchVersion
 
         jackOptions {
             enabled true
+        }
+    }
+    signingConfigs {
+        release {
+            storeFile file(STORE_FILE)
+            storePassword STORE_PASSWORD
+            keyAlias KEY_ALIAS
+            keyPassword KEY_PASSWORD
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            signingConfig signingConfigs.release
         }
     }
 

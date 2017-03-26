@@ -41,36 +41,15 @@ public class IoUtils {
     }
     // Output
     /**
-     * @Deprecated use {@link #output(byte[], File)} instead
      * @param file
      * @param bytes
      * @return
      */
     public static File output(File file, byte[] bytes) {
-        return output(bytes, file);
+        return output(file, bytes, false);
     }
 
-    /**
-     * @Deprecated use {@link #output(byte[], File, boolean)} instead
-     * @param file
-     * @param bytes
-     * @param append
-     * @return
-     */
     public static File output(File file, byte[] bytes, boolean append) {
-        return output(bytes, file, append);
-    }
-
-    /**
-     * @param bytes
-     * @param file
-     * @return null if fail
-     */
-    public static File output(byte[] bytes, File file) {
-        return output(bytes, file, false);
-    }
-
-    public static File output(byte[] bytes, File file, boolean append) {
         OutputStream outputStream = null;
         try {
             outputStream = new BufferedOutputStream(new FileOutputStream(file, append));

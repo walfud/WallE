@@ -14,6 +14,8 @@ android {
     defaultConfig {
         minSdkVersion config.minSdkVersion
         targetSdkVersion config.targetSdkVersion
+        versionCode config.majorVersion * 100 + config.minorVersion * 10 + config.patchVersion
+        versionName config.majorVersion + "." + config.minorVersion + "." + config.patchVersion
         multiDexEnabled true
 
         consumerProguardFiles 'proguard-rules.pro'

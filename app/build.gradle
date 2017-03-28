@@ -1,3 +1,7 @@
+plugins {
+    id "me.tatarka.retrolambda" version "3.6.0"
+}
+
 apply plugin: 'com.android.application'
 apply from: '../config.properties'
 
@@ -11,10 +15,6 @@ android {
         targetSdkVersion config.targetSdkVersion
         versionCode config.majorVersion * 100 + config.minorVersion * 10 + config.patchVersion
         versionName config.majorVersion + "." + config.minorVersion + "." + config.patchVersion
-
-        jackOptions {
-            enabled true
-        }
     }
     signingConfigs {
         release {
@@ -43,8 +43,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 }
 

@@ -1,6 +1,8 @@
 plugins {
     id "com.github.dcendents.android-maven" version "1.5"       // https://github.com/dcendents/android-maven-gradle-plugin
     id "com.jfrog.bintray" version "1.7.3"                      // https://github.com/bintray/gradle-bintray-plugin
+
+    id "me.tatarka.retrolambda" version "3.6.0"
 }
 
 apply plugin: 'com.android.library'
@@ -26,8 +28,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 }
 

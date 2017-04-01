@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by walfud on 2015/11/19.
@@ -79,7 +80,7 @@ public class IoUtils {
 
     // Write
     public static File write(File file, String data) {
-        return write(file, data, Charset.forName("UTF-8")); // StandardCharsets.UTF_8
+        return write(file, data, StandardCharsets.UTF_8);
     }
 
     public static File write(File file, String data, Charset charset) {

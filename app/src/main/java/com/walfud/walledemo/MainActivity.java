@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.walfud.walle.WallE;
+import com.walfud.walle.network.NetworkUtils;
 
 public class MainActivity extends Activity {
     public static final String TAG = "MainActivity";
@@ -20,5 +21,6 @@ public class MainActivity extends Activity {
         mBtn.setOnClickListener(v -> Toast.makeText(MainActivity.this, "1", Toast.LENGTH_SHORT).show());
 
         WallE.initialize(getApplicationContext());
+        NetworkUtils.get("http://so.com").subscribe();
     }
 }

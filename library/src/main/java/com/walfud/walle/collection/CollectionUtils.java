@@ -28,6 +28,9 @@ public class CollectionUtils {
     public static <T> T find(Collection<T> collection, T t) {
         return find(collection, t, 0);
     }
+    public static <S, T> T find(Collection<T> collection, Comparator<S, T> compFunc) {
+        return find(collection, null, compFunc);
+    }
     public static <S, T> T find(Collection<T> collection, S s, Comparator<S, T> compFunc) {
         return find(collection, s, 0, compFunc);
     }

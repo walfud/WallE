@@ -2,6 +2,8 @@ package com.walfud.walle;
 
 import android.content.Context;
 
+import com.walfud.walle.android.Etc;
+
 /**
  * Created by walfud on 2016/7/7.
  */
@@ -18,6 +20,8 @@ public class WallE {
      */
     public static final boolean initialize(Context context) {
         sContext = context.getApplicationContext();
+
+        Etc.initialize(context);
 
         return true;
     }

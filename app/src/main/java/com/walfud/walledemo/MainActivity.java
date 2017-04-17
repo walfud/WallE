@@ -25,13 +25,11 @@ public class MainActivity extends Activity {
         WallE.initialize(getApplicationContext());
         NetworkUtils.get("http://so.com").subscribe();
 
-        new Thread(() -> Etc.<Void>runOnUiThread(args -> {
+        new Thread(() -> Etc.runOnUiThread(args -> {
             for (Object arg : args) {
                 Log.d(TAG, Thread.currentThread().getName() + ":" + arg.toString());
             }
-
-            return null;
-        }, null, 1, 2, 3, 4))
+        }, 1, 2, 3, 4))
                 .run();
     }
 }

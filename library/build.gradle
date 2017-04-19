@@ -7,9 +7,10 @@ plugins {
 
 apply plugin: 'com.android.library'
 apply plugin: 'realm-android'
-apply from: '../config.properties'
 
 android {
+    def config = rootProject.extensions.getByName("ext")
+
     compileSdkVersion config.compileSdkVersion
     buildToolsVersion config.buildToolsVersion
 
@@ -35,14 +36,14 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:support-v4:' + config.supportVersion
-    compile 'com.android.support:appcompat-v7:' + config.supportVersion
-    compile 'com.android.support:support-v13:' + config.supportVersion
-    compile 'com.android.support:recyclerview-v7:' + config.supportVersion
-    compile 'com.android.support:cardview-v7:' + config.supportVersion
-    compile 'com.android.support:percent:' + config.supportVersion
-    compile 'com.android.support:design:' + config.supportVersion
-    compile 'com.android.support:support-annotations:' + config.supportVersion
+    compile 'com.android.support:support-v4:' + supportVersion
+    compile 'com.android.support:appcompat-v7:' + supportVersion
+    compile 'com.android.support:support-v13:' + supportVersion
+    compile 'com.android.support:recyclerview-v7:' + supportVersion
+    compile 'com.android.support:cardview-v7:' + supportVersion
+    compile 'com.android.support:percent:' + supportVersion
+    compile 'com.android.support:design:' + supportVersion
+    compile 'com.android.support:support-annotations:' + supportVersion
     compile 'com.android.support:multidex:1.0.1'
 
     compile 'com.google.code.gson:gson:2.8.0'

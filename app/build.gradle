@@ -3,9 +3,10 @@ plugins {
 }
 
 apply plugin: 'com.android.application'
-apply from: '../config.properties'
 
 android {
+    def config = rootProject.extensions.getByName("ext")
+
     compileSdkVersion config.compileSdkVersion
     buildToolsVersion config.buildToolsVersion
 

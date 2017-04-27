@@ -1,6 +1,5 @@
 package com.walfud.walle.collection;
 
-import com.walfud.walle.algorithm.Comparator;
 import com.walfud.walle.lang.ObjectUtils;
 
 import java.util.ArrayDeque;
@@ -12,6 +11,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * Created by walfud on 9/22/15.
@@ -26,86 +26,37 @@ public class CollectionUtils {
 
     //
     public static <T> T find(Collection<T> collection, T t) {
-        return find(collection, t, 0);
+        return find(collection, t, 0, collection.size());
     }
-    public static <S, T> T find(Collection<T> collection, Comparator<S, T> compFunc) {
-        return find(collection, null, compFunc);
+    public static <T> T find(Collection<T> collection, Predicate<T> predicate) {
+        return find(collection, predicate, 0, collection.size());
     }
-    public static <S, T> T find(Collection<T> collection, S s, Comparator<S, T> compFunc) {
-        return find(collection, s, 0, compFunc);
+    public static <T, S> T find(Collection<T> collection, S s, int startOffset, int endOffset) {
+        return find(collection, e -> ObjectUtils.isEqual(s, e), startOffset, endOffset);
     }
-    public static <T> T find(Collection<T> collection, T t, int startOffset) {
-        return find(collection, t, startOffset, null);
+    public static <T> T find(Collection<T> collection, Predicate<T> predicate, int startOffset, int endOffset) {
+        return find(collection.iterator(), collection.size(), predicate, startOffset, endOffset);
     }
-    public static <S, T> T find(Collection<T> collection, S s, int startOffset, Comparator<S, T> compFunc) {
-        if (collection == null) {
-            return null;
-        }
 
-        Iterator<T> iterator = collection.iterator();
-        for (int i = 0; i < collection.size(); i++) {
+    public static <K, V> Map.Entry<K, V> find(Map<K, V> map, K key) {
+        return find(map, (Predicate<K>) k -> ObjectUtils.isEqual(key, k));
+    }
+    public static <K, V> Map.Entry<K, V> find(Map<K, V> map, Predicate<K> predicateKey) {
+        return find(map.entrySet().iterator(), map.size(), entry -> predicateKey.test(entry.getKey()), 0, map.size());
+    }
+    public static <K, V> Map.Entry<K, V> findValue(Map<K, V> map, V value) {
+        return findValue(map, (Predicate<V>) v -> ObjectUtils.isEqual(value, v));
+    }
+    public static <K, V> Map.Entry<K, V> findValue(Map<K, V> map, Predicate<V> predicateValue) {
+        return find(map.entrySet().iterator(), map.size(), entry -> predicateValue.test(entry.getValue()), 0, map.size());
+    }
+    public static <T> T find(Iterator<T> iterator, int size, Predicate<T> predicate, int startOffset, int endOffset) {
+        for (int i = 0; i < size; i++) {
             T elem = iterator.next();
 
-            if (i >= startOffset) {
-                if (compFunc == null) {
-                    // Use default equal comparator
-                    if (ObjectUtils.isEqual(s, elem)) {
-                        return elem;
-                    }
-                } else {
-                    // Use custom comparator
-                    if (compFunc.compareTo(s, elem) == 0) {
-                        return elem;
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public static <K, V> Map.Entry<K, V> find(Map<K, V> collection, V v) {
-        return find(collection, v, 0);
-    }
-    public static <S, K, V> Map.Entry<K, V> find(Map<K, V> collection, S s, Comparator<S, K> compFunc) {
-        return find(collection, s, 0, compFunc);
-    }
-    public static <K, V> Map.Entry<K, V> find(Map<K, V> collection, V v, int startOffset) {
-        return find(collection, v, startOffset, null);
-    }
-    /**
-     *
-     * @param map
-     * @param s
-     * @param startOffset
-     * @param compFunc `a` is `s`, `b` is element in container
-     * @param <S>
-     * @param <K>
-     * @param <V>
-     * @return
-     */
-    public static <S, K, V> Map.Entry<K, V> find(Map<K, V> map, S s, int startOffset, Comparator<S, K> compFunc) {
-        if (map == null) {
-            return null;
-        }
-
-        Iterator<Map.Entry<K, V>> iterator = map.entrySet().iterator();
-        for (int i = 0; i < map.size(); i++) {
-            Map.Entry<K, V> kv = iterator.next();
-            K key = kv.getKey();
-            V value = kv.getValue();
-
-            if (i >= startOffset) {
-                if (compFunc == null) {
-                    // Use default equal comparator
-                    if (ObjectUtils.isEqual(s, key)) {
-                        return kv;
-                    }
-                } else {
-                    // Use custom comparator
-                    if (compFunc.compareTo(s, key) == 0) {
-                        return kv;
-                    }
+            if (startOffset <= i && i < endOffset) {
+                if (predicate.test(elem)) {
+                    return elem;
                 }
             }
         }
@@ -121,7 +72,7 @@ public class CollectionUtils {
      * @param <E>
      * @return
      */
-    public static <T extends Collection, E> T filter(T t, Comparable<E> comparable) {
+    public static <T extends Collection, E> T filter(T t, Predicate<E> comparable) {
         T filtered;
         if (false) {
         } else if (t instanceof ArrayList) {
@@ -139,7 +90,7 @@ public class CollectionUtils {
         Iterator<E> iterator = t.iterator();
         while (iterator.hasNext()) {
             E e = iterator.next();
-            if (comparable.compareTo(e) == 0) {
+            if (comparable.test(e)) {
                 filtered.add(e);
             }
         }

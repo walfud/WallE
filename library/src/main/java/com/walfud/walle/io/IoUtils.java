@@ -1,7 +1,5 @@
 package com.walfud.walle.io;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,21 +19,11 @@ public class IoUtils {
     public static byte[] input(File file) {
         byte[] bytes = new byte[0];
 
-        InputStream inputStream = null;
-        try {
-            inputStream = new BufferedInputStream(new FileInputStream(file));
+        try (InputStream inputStream = new FileInputStream(file)) {
             bytes = new byte[(int) file.length()];
             inputStream.read(bytes);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
         }
 
         return bytes;
@@ -51,23 +39,12 @@ public class IoUtils {
     }
 
     public static File output(File file, byte[] bytes, boolean append) {
-        OutputStream outputStream = null;
-        try {
-            outputStream = new BufferedOutputStream(new FileOutputStream(file, append));
+        try (OutputStream outputStream = new FileOutputStream(file, append)) {
             outputStream.write(bytes);
             outputStream.flush();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
-        } finally {
-            if (outputStream != null) {
-                try {
-                    outputStream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
         }
 
         return file;
@@ -87,13 +64,7 @@ public class IoUtils {
         return write(file, data, charset, false);
     }
     public static File write(File file, String data, Charset charset, boolean append) {
-        try {
-            return output(file, data.getBytes(charset), append);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return output(file, data.getBytes(charset), append);
     }
 
     /**

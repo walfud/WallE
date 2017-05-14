@@ -16,31 +16,28 @@ public class ZipUtils {
     public static final String TAG = "ZipUtils";
 
     public static byte[] compress(byte[] data) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(0);
-        ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream);
-        try {
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(0)) {
+            ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream);
             zipOutputStream.write(data);
+            return byteArrayOutputStream.toByteArray();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                byteArrayOutputStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
-        return byteArrayOutputStream.toByteArray();
+
+        return null;
     }
 
     /**
      *
      * @param src
      * @param dstZipFile should be a file path
+     *
+     * @return `true` if everything is ok, otherwise is `false`
      */
-    public static void compress(File src, final File dstZipFile) {
-        FileOutputStream fileOutputStream = null;
-        try {
-            fileOutputStream = new FileOutputStream(dstZipFile);
+    public static boolean compress(File src, final File dstZipFile) {
+        final boolean[] ret = {true};
+
+        try (FileOutputStream fileOutputStream = new FileOutputStream(dstZipFile)) {
             final ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
 
             final String baseDir = src.getPath();
@@ -55,22 +52,15 @@ public class ZipUtils {
                     zipOutputStream.closeEntry();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    ret[0] = false;
                 }
 
                 return true;
             });
-
-            zipOutputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (fileOutputStream != null) {
-                    fileOutputStream.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
+
+        return ret[0];
     }
 }

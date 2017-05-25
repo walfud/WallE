@@ -30,7 +30,7 @@ public class Etc {
         T call(Object... args);
     }
     public static <T> T runOnUiThread(Func<T> func, StrongReference<T> rtn, Object... args) {
-        if (Looper.getMainLooper().isCurrentThread()) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
             T t = func.call(args);
             if (rtn != null) {
                 rtn.set(t);

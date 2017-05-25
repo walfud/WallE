@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 
 /**
  * Created by walfud on 9/22/15.
@@ -127,5 +126,18 @@ public class CollectionUtils {
         }
 
         return m;
+    }
+
+    //
+    public interface Predicate<T> {
+
+        /**
+         * Evaluates this predicate on the given argument.
+         *
+         * @param t the input argument
+         * @return {@code true} if the input argument matches the predicate,
+         * otherwise {@code false}
+         */
+        boolean test(T t);
     }
 }

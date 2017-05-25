@@ -1,8 +1,5 @@
-plugins {
-    id "me.tatarka.retrolambda" version "3.6.0"
-}
-
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
     def config = rootProject.extensions.getByName("ext")
@@ -41,11 +38,6 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/rxjava.properties'
-    }
-
-    compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
     }
 }
 

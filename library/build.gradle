@@ -6,7 +6,6 @@ plugins {
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'realm-android'
 
 android {
     def config = rootProject.extensions.getByName("ext")

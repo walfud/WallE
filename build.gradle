@@ -1,15 +1,15 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.1.2-4'
     repositories {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.android.tools.build:gradle:+'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:+'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+
     }
 }
 
@@ -18,21 +18,21 @@ allprojects {
         mavenCentral()
         jcenter()
     }
-
-    ext {
-        compileSdkVersion = 25
-        buildToolsVersion = '25.0.2'
-        minSdkVersion     = 21
-        targetSdkVersion  = 25
-        supportVersion    = '25.1.1'
-
-        majorVersion      = 2
-        minorVersion      = 0
-        patchVersion      = 2
-    }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
+ext {
+    kotlin_version = '1.1.2-4'
+    compileSdkVersion = 25
+    buildToolsVersion = '25.0.2'
+    minSdkVersion     = 21
+    targetSdkVersion  = 25
+    supportVersion    = '25.1.1'
+
+    majorVersion      = 3
+    minorVersion      = 0
+    patchVersion      = 0
+}

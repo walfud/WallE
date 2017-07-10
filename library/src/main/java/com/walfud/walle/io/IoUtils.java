@@ -68,29 +68,6 @@ public class IoUtils {
     }
 
     /**
-     * @deprecated use {@link #write(File, String, Charset)} instead
-     * @param file
-     * @param data
-     * @param encoding
-     * @return
-     */
-    public static File write(File file, String data, String encoding) {
-        return write(file, data, Charset.forName(encoding));
-    }
-
-    /**
-     * @deprecated use {@link #write(File, String, Charset, boolean)} instead
-     * @param file
-     * @param data
-     * @param encoding
-     * @param append
-     * @return
-     */
-    public static File write(File file, String data, String encoding, boolean append) {
-        return write(file, data, Charset.forName(encoding), append);
-    }
-
-    /**
      * Delete recursively
      *
      * @param target

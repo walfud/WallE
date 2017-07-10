@@ -1,6 +1,5 @@
-package com.walfud.walle
+package com.walfud.walle.lang
 
-import java.security.MessageDigest
 import kotlin.experimental.and
 
 //
@@ -14,8 +13,3 @@ infix fun Byte.ushr(count: Int): Byte = (toInt() and 0x000000ff ushr count).toBy
 
 fun Byte.char() = Pair(Character.forDigit((this ushr 4).toInt(), 16), Character.forDigit((this and 0x0f).toInt(), 16))
 fun Byte.string() = char().run { "$first$second" }
-fun ByteArray.string() = map { it.string() }.joinToString("")
-
-//
-
-fun String.md5() = MessageDigest.getInstance("MD5").run { digest(toByteArray()).string() }

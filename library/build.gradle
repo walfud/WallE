@@ -1,22 +1,20 @@
 plugins {
-    id "com.github.dcendents.android-maven" version "1.5"       // https://github.com/dcendents/android-maven-gradle-plugin
-    id "com.jfrog.bintray" version "1.7.3"                      // https://github.com/bintray/gradle-bintray-plugin
+    id 'com.github.dcendents.android-maven' version '1.5'       // https://github.com/dcendents/android-maven-gradle-plugin
+    id 'com.jfrog.bintray' version '1.7.3'                      // https://github.com/bintray/gradle-bintray-plugin
 }
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
-def config = rootProject.extensions.getByName("ext")
-
 android {
-    compileSdkVersion config.compileSdkVersion
-    buildToolsVersion config.buildToolsVersion
+    compileSdkVersion project.compileSdkVersion
+    buildToolsVersion project.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion config.minSdkVersion
-        targetSdkVersion config.targetSdkVersion
-        versionCode config.majorVersion * 100 + config.minorVersion * 10 + config.patchVersion
-        versionName config.majorVersion + "." + config.minorVersion + "." + config.patchVersion
+        minSdkVersion project.minSdkVersion
+        targetSdkVersion project.targetSdkVersion
+        versionCode majorVersion * 100 + minorVersion * 10 + patchVersion
+        versionName majorVersion + '.' + minorVersion + '.' + patchVersion
         multiDexEnabled true
 
         consumerProguardFiles 'proguard-rules.pro'
@@ -38,7 +36,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile 'org.jetbrains.kotlin:kotlin-stdlib-jre7:' + kotlinVersion
 
     compile 'com.android.support:support-v4:' + supportVersion
     compile 'com.android.support:appcompat-v7:' + supportVersion
@@ -59,7 +57,7 @@ dependencies {
     compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.0.1'
     compile 'com.trello.rxlifecycle2:rxlifecycle-navi:2.0.1'
 
-    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    compile 'com.squareup.okhttp3:okhttp:3.7.0'
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
@@ -74,7 +72,7 @@ dependencies {
 
 kotlin {
     experimental {
-        coroutines "enable"
+        coroutines 'enable'
     }
 }
 kapt {

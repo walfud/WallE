@@ -2,18 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-def config = rootProject.extensions.getByName("ext")
-
 android {
-    compileSdkVersion config.compileSdkVersion
-    buildToolsVersion config.buildToolsVersion
+    compileSdkVersion project.compileSdkVersion
+    buildToolsVersion project.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.walfud.walle"
-        minSdkVersion config.minSdkVersion
-        targetSdkVersion config.targetSdkVersion
-        versionCode config.majorVersion * 100 + config.minorVersion * 10 + config.patchVersion
-        versionName config.majorVersion + "." + config.minorVersion + "." + config.patchVersion
+        applicationId 'com.walfud.walle'
+        minSdkVersion project.minSdkVersion
+        targetSdkVersion project.targetSdkVersion
+        versionCode majorVersion * 100 + minorVersion * 10 + patchVersion
+        versionName majorVersion + '.' + minorVersion + '.' + patchVersion
     }
     signingConfigs {
         release {

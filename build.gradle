@@ -12,6 +12,8 @@ buildscript {
         majorVersion      = 3
         minorVersion      = 0
         patchVersion      = 0
+        versionCode       = majorVersion * 100 + minorVersion * 10 + patchVersion
+        versionName       = majorVersion + '.' + minorVersion + '.' + patchVersion
     }
 
     repositories {

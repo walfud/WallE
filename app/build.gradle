@@ -3,15 +3,15 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion project.compileSdkVersion
-    buildToolsVersion project.buildToolsVersion
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
 
     defaultConfig {
         applicationId 'com.walfud.walle'
-        minSdkVersion project.minSdkVersion
-        targetSdkVersion project.targetSdkVersion
-        versionCode majorVersion * 100 + minorVersion * 10 + patchVersion
-        versionName majorVersion + '.' + minorVersion + '.' + patchVersion
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode rootProject.versionCode
+        versionName rootProject.versionName
     }
     signingConfigs {
         release {

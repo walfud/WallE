@@ -4,18 +4,17 @@ import android.content.ContentResolver
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
-import android.support.annotation.RequiresPermission
 import java.util.*
 
 object DbUtils {
-    val TAG = "DbUtils"
+    const val TAG = "DbUtils"
 
-    fun query(contentResolver: ContentResolver, @RequiresPermission.Read uri: Uri,
+    fun query(contentResolver: ContentResolver, uri: Uri,
               projection: Array<String>?, selection: String?,
               selectionArgs: Array<String>?, sortOrder: String?): List<Map<String, Any?>> {
 
         return contentResolver.query(uri, projection, selection, selectionArgs, sortOrder).use {
-            query(it)
+            query(it!!)
         }
     }
 

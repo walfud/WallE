@@ -10,7 +10,7 @@ import com.walfud.walle.lang.StrongReference;
  * Created by walfud on 2017/4/17.
  */
 
-public class Etc {
+public class Misc {
     private static Handler sHandler;
 
     public static void initialize(Context context) {

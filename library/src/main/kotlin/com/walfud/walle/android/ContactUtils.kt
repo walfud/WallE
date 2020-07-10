@@ -1,11 +1,10 @@
-package com.walfud.walle.android.contact
+package com.walfud.walle.android
 
 import android.content.ContentProviderOperation
 import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
 import android.provider.ContactsContract
-import com.walfud.walle.android.DbUtils
 import com.walfud.walle.collection.CollectionUtils
 
 /**
@@ -61,7 +60,7 @@ object ContactUtils {
     private fun getDisplayName(context: Context, lookupKey: String): String? {
         var displayName: String? = null
         val structuredNameResult = DbUtils.query(context.contentResolver, ContactsContract.Data.CONTENT_URI, null, String.format("%s=? AND %s=?", ContactsContract.Data.LOOKUP_KEY, ContactsContract.Data.MIMETYPE), arrayOf(lookupKey, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE), null)
-        if (!structuredNameResult.isEmpty()) {
+        if (structuredNameResult.isNotEmpty()) {
             displayName = structuredNameResult[0][ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME] as String?
         }
         return displayName
@@ -95,7 +94,7 @@ object ContactUtils {
 
     private fun getNoteList(context: Context, lookupKey: String): List<String>? {
         val noteResult = DbUtils.query(context.contentResolver, ContactsContract.Data.CONTENT_URI, null, String.format("%s=? AND %s=?", ContactsContract.Data.LOOKUP_KEY, ContactsContract.Data.MIMETYPE), arrayOf(lookupKey, ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE), null)
-        return noteResult?.map { it[ContactsContract.CommonDataKinds.Note.NOTE] as String }
+        return noteResult.map { it[ContactsContract.CommonDataKinds.Note.NOTE] as String }
     }
 
     private fun getAddressList(context: Context, lookupKey: String): List<AddressModel> {
@@ -132,7 +131,7 @@ object ContactUtils {
     private fun getOrganization(context: Context, lookupKey: String): OrganizationModel {
         val organization = OrganizationModel()
         val organizationResult = DbUtils.query(context.contentResolver, ContactsContract.Data.CONTENT_URI, null, String.format("%s=? AND %s=?", ContactsContract.Data.LOOKUP_KEY, ContactsContract.Data.MIMETYPE), arrayOf(lookupKey, ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE), null)
-        if (!organizationResult.isEmpty()) {
+        if (organizationResult.isNotEmpty()) {
             organization.title = organizationResult[0][ContactsContract.CommonDataKinds.Organization.TITLE] as String?
             organization.organization = organizationResult[0][ContactsContract.CommonDataKinds.Organization.DATA] as String?
         }
@@ -170,12 +169,12 @@ object ContactUtils {
                     .withValue(ContactsContract.Data.DATA1, phone)
                     .build()
         })
-        try {
+        return try {
             val results = context.contentResolver.applyBatch(ContactsContract.AUTHORITY, allOp)
-            return java.lang.Long.valueOf(results[0].uri.lastPathSegment)!!
+            java.lang.Long.valueOf(results[0].uri.lastPathSegment!!)
         } catch (e: Exception) {
             e.printStackTrace()
-            return -1
+            -1
         }
 
     }
